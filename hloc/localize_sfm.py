@@ -104,7 +104,7 @@ def main(reference_sfm, queries, retrieval, features, matches, results,
     assert retrieval.exists(), retrieval
     assert features.exists(), features
     assert matches.exists(), matches
-
+    print("queries", queries)
     queries = parse_image_lists(queries, with_intrinsics=True)
     retrieval_dict = parse_retrieval(retrieval)
 

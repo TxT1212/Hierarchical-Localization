@@ -216,6 +216,7 @@ def main(conf, image_dir, export_dir=None, as_half=False,
 
         with h5py.File(str(feature_path), 'a') as fd:
             grp = fd.create_group(name)
+            # print("name ", name)
             for k, v in pred.items():
                 grp.create_dataset(k, data=v)
 

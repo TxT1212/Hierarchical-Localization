@@ -15,7 +15,8 @@ from .utils.database import COLMAPDatabase
 from .utils.parsers import names_to_pair
 
 
-def create_empty_model(reference_model, empty_model):
+def create_empty_model(reference_model:Path, empty_model:Path):
+    reference_model =Path(reference_model)
     logging.info('Creating an empty model.')
     empty_model.mkdir(exist_ok=True)
     shutil.copy(reference_model / 'cameras.bin', empty_model)
@@ -28,7 +29,7 @@ def create_empty_model(reference_model, empty_model):
     write_images_binary(images_empty, empty_model / 'images.bin')
 
 
-def create_db_from_model(empty_model, database_path):
+def create_db_from_model(empty_model:Path, database_path:Path):
     if database_path.exists():
         logging.warning('Database already exists.')
 
@@ -52,7 +53,7 @@ def create_db_from_model(empty_model, database_path):
     return {image.name: i for i, image in images.items()}
 
 
-def import_features(image_ids, database_path, features_path):
+def import_features(image_ids, database_path: Path, features_path: Path):
     logging.info('Importing features into the database...')
     hfile = h5py.File(str(features_path), 'r')
     db = COLMAPDatabase.connect(database_path)
@@ -67,7 +68,7 @@ def import_features(image_ids, database_path, features_path):
     db.close()
 
 
-def import_matches(image_ids, database_path, pairs_path, matches_path,
+def import_matches(image_ids, database_path: Path, pairs_path: Path, matches_path: Path,
                    min_match_score=None, skip_geometric_verification=False):
     logging.info('Importing matches into the database...')
 
@@ -107,7 +108,7 @@ def import_matches(image_ids, database_path, pairs_path, matches_path,
     db.close()
 
 
-def geometric_verification(colmap_path, database_path, pairs_path):
+def geometric_verification(colmap_path: Path, database_path: Path, pairs_path: Path):
     logging.info('Performing geometric verification of the matches...')
     cmd = [
         str(colmap_path), 'matches_importer',
@@ -119,7 +120,7 @@ def geometric_verification(colmap_path, database_path, pairs_path):
     subprocess.run(cmd, check=True)
 
 
-def run_triangulation(colmap_path, model_path, database_path, image_dir,
+def run_triangulation(colmap_path, model_path:Path, database_path, image_dir,
                       empty_model):
     logging.info('Running the triangulation...')
     assert model_path.exists()
@@ -157,11 +158,11 @@ def run_triangulation(colmap_path, model_path, database_path, image_dir,
     return stats
 
 
-def main(sfm_dir, reference_sfm_model, image_dir, pairs, features, matches,
+def main(sfm_dir, reference_sfm_model:Path, image_dir:Path, pairs:Path, features:Path, matches:Path,
          colmap_path='colmap', skip_geometric_verification=False,
          min_match_score=None):
 
-    assert reference_sfm_model.exists(), reference_sfm_model
+    assert Path(reference_sfm_model).exists(), reference_sfm_model
     assert features.exists(), features
     assert pairs.exists(), pairs
     assert matches.exists(), matches
