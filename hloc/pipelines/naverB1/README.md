@@ -12,5 +12,5 @@ unzip $dataset/images/database_and_query_images.zip -d $dataset/images
 ## Pipeline
 
 ```bash
-python3 -m hloc.pipelines.naver.pipeline
+python3 -m hloc.pipelines.naverB1.pipeline
 ```

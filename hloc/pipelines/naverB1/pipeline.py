@@ -28,6 +28,8 @@ reference_sfm = outputs / 'sfm_superpoint+superglue'  # the SfM model we will bu
 sfm_pairs = outputs / f'pairs-db-covis{args.num_covis}.txt'  # top-k most covisible in SIFT model
 loc_pairs = outputs / f'pairs-query-netvlad{args.num_loc}.txt'  # top-k retrieved by NetVLAD
 results = outputs / f'hloc_superpoint+superglue_netvlad{args.num_loc}.txt'
+loc_pairs = Path('/home/txt/Downloads/ezxr_loc/text_hfnet/saved/hfnet_nn_B1.txt')
+results = outputs / f'hloc_superpoint+superglue_hnet_ocr5.txt'
 
 # list the standard configurations available
 print(f'Configs for feature extractors:\n{pformat(extract_features.confs)}')
@@ -38,12 +40,12 @@ retrieval_conf = extract_features.confs['netvlad']
 feature_conf = extract_features.confs['superpoint_inloc']
 matcher_conf = match_features.confs['superglue']
 
-features = extract_features.main(feature_conf, images, outputs)
+# features = extract_features.main(feature_conf, images, outputs)
 features = extract_features.main(feature_conf, query, outputs)
 print("*****features: ", features)
 sift_sfm = '/media/txt/data2/naver/HyundaiDepartmentStore/B1/release/sfm_sift'
-pairs_from_covisibility.main(
-    sift_sfm, sfm_pairs, num_matched=args.num_covis)
+# pairs_from_covisibility.main(
+#     sift_sfm, sfm_pairs, num_matched=args.num_covis)
 sfm_matches = match_features.main(
     matcher_conf, sfm_pairs, feature_conf['output'], outputs)
 
@@ -56,21 +58,21 @@ triangulation.main(
     sfm_matches,
     colmap_path='colmap')
 
-global_descriptors = extract_features.main(retrieval_conf, images, outputs)
-print(global_descriptors)
-global_descriptors = extract_features.main(retrieval_conf, query, outputs)
-print(global_descriptors)
+# global_descriptors = extract_features.main(retrieval_conf, images, outputs)
+# print(global_descriptors)
+# global_descriptors = extract_features.main(retrieval_conf, query, outputs)
+# print(global_descriptors)
 
-pairs_from_retrieval.main(
-    global_descriptors, loc_pairs, args.num_loc,
-    query_prefix='2019-08-21_09-49-05', db_model=reference_sfm)
-loc_matches = match_features.main(
-    matcher_conf, loc_pairs, feature_conf['output'], outputs)
+# pairs_from_retrieval.main(
+#     global_descriptors, loc_pairs, args.num_loc,
+#     query_prefix='2019-08-21_09-49-05', db_model=reference_sfm)
+# loc_matches = match_features.main(
+#     matcher_conf, loc_pairs, feature_conf['output'], outputs)
 
 # localize_sfm.main(
 #     reference_sfm,
 #     # dataset / 'queries/*',
-#     dataset / 'query/*_time_queries_with_intrinsics.txt',
+#     query / '../queries_with_intrinsics.txt',
 #     loc_pairs,
 #     features,
 #     loc_matches,

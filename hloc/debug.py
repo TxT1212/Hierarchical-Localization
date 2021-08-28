@@ -18,24 +18,24 @@ def getdatasets(key, archive):
 
     return out
 
-with h5py.File(str("/media/txt/data2/naver/HyundaiDepartmentStore/outputs/feats-superpoint-n4096-r1600.h5"), 'r') as fd:
-    print(fd)
-    # for key in fd.keys():
-    #     print(key)
-    #     print(fd[key].keys())
-    #     print(fd[key])
-    # # fd.create_group(key)
-    # new_data.create_group(key)
-    datasets  = sorted(getdatasets('/', fd))
-    # get the group-names from the lists of datasets
-    groups = list(set([i[::-1].split('/',1)[1][::-1] for i in datasets]))
-    groups = [i for i in groups if len(i)>0]
+# with h5py.File(str("/media/txt/data2/naver/outputs/B1/feats-superpoint-n4096-r1600_matches-superglue_pairs-db-covis10.h5"), 'r') as fd:
+#     print(fd)
+#     # for key in fd.keys():
+#     #     print(key)
+#     #     print(fd[key].keys())
+#     #     print(fd[key])
+#     # # fd.create_group(key)
+#     # new_data.create_group(key)
+#     datasets  = sorted(getdatasets('/', fd))
+#     # get the group-names from the lists of datasets
+#     groups = list(set([i[::-1].split('/',1)[1][::-1] for i in datasets]))
+#     groups = [i for i in groups if len(i)>0]
 
-    # sort groups based on depth
-    idx        = np.argsort(np.array([len(i.split('/')) for i in groups]))
-    groups = [groups[i] for i in idx]
-    for d in groups:
-        print(d)
+#     # sort groups based on depth
+#     idx        = np.argsort(np.array([len(i.split('/')) for i in groups]))
+#     groups = [groups[i] for i in idx]
+#     for d in groups:
+#         print(d)
 
 
 # db/1045.jpg
